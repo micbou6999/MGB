@@ -56,6 +56,16 @@
             box-sizing: border-box;
         }
 
+        .form-group.checkbox {
+            display: flex;
+            align-items: center;
+        }
+
+        .form-group.checkbox label {
+            margin-bottom: 0;
+            margin-right: 10px;
+        }
+
         button {
             background-color: #333;
             color: #fff;
@@ -81,14 +91,17 @@
             width: 100%;
         }
 
-        table, th, td {
+        table,
+        th,
+        td {
             border: 1px solid #ccc;
             border-collapse: collapse;
             padding: 8px;
             text-align: left;
         }
 
-        th, td {
+        th,
+        td {
             font-weight: normal;
         }
 
@@ -97,7 +110,8 @@
             color: #fff;
         }
 
-        th, td {
+        th,
+        td {
             width: 50%;
         }
 
@@ -114,6 +128,43 @@
         footer p {
             margin: 0;
         }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        .modal-close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .modal-close:hover,
+        .modal-close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
     </style>
 </head>
 
@@ -121,7 +172,7 @@
     <header>
         <h1>Oil Change Cost Estimator</h1>
     </header>
-
+	<p><a href="index.html">Return to Homepage</a></p>
     <section>
         <form class="estimator-form">
             <div class="form-group">
@@ -142,25 +193,63 @@
                     <option value="lessThanOrEqualTo75000">Less than or equal to 75000</option>
                 </select>
             </div>
+            <div class="form-group checkbox">
+                <label for="includeAirFilter">Include Air Filter</label>
+                <input type="checkbox" id="includeAirFilter">
+            </div>
+            <div class="form-group checkbox">
+                <label for="includeCabinAirFilter">Include Cabin Air Filter</label>
+                <input type="checkbox" id="includeCabinAirFilter">
+            </div>
+            <div class="form-group checkbox">
+                <label for="includeSparkPlugChange">Include Spark Plug Change</label>
+                <input type="checkbox" id="includeSparkPlugChange">
+                <span id="sparkPlugInputContainer" style="display: none;">
+                    <label for="sparkPlugCylinders">Number of Cylinders:</label>
+                    <input type="number" id="sparkPlugCylinders" min="1">
+                </span>
+            </div>
             <button type="button" onclick="calculateCost()">Estimate Cost</button>
         </form>
 
         <div class="result" id="result"></div>
-
         <p>For a basic estimate, you can perform a Google search using your car's year, make, and model along with "oil capacity and type".</p>
     </section>
+
+    <!-- Modal -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal()">&times;</span>
+            <p>This is just an estimate. For a more accurate quote, please contact the owner.</p>
+        </div>
+    </div>
 
     <script>
         function calculateCost() {
             const oilCapacity = parseFloat(document.getElementById('oilCapacity').value);
             const oilType = document.getElementById('oilType').value;
             const mileageOption = document.getElementById('mileageOption').value;
-            
+            const includeAirFilter = document.getElementById('includeAirFilter').checked;
+            const includeCabinAirFilter = document.getElementById('includeCabinAirFilter').checked;
+            const includeSparkPlugChange = document.getElementById('includeSparkPlugChange').checked;
+            const sparkPlugCylinders = includeSparkPlugChange ? parseInt(document.getElementById('sparkPlugCylinders').value) || 0 : 0;
+
             // Define costs
             let oilCost;
-            let filterCost = 11.99;
+            let oilFilterCost = 12.99; // Adjust this to your actual oil filter cost
+            let airFilterCost = 30.99;
+            let cabinAirFilterCost = 22.99;
+            let sparkPlugCost = 13.99 * sparkPlugCylinders; // Assuming $1.99 per spark plug
             const salesTaxRate = 10.75; // 10.75% sales tax
-            const serviceCost = 50;
+            let serviceCost = 50;
+
+            if (includeSparkPlugChange) {
+                serviceCost += 50; // Additional $50 for spark plug maintenance
+            }
+
+            if (includeAirFilter || includeCabinAirFilter) {
+                serviceCost += 10; // Additional $5 for either air filter or cabin air filter
+            }
 
             if (oilType === 'synthetic' && mileageOption === 'greaterThan75000') {
                 oilCost = 12.59;
@@ -174,8 +263,20 @@
 
             // Calculate total costs
             const totalOilCost = oilCapacity * oilCost;
-            const totalSalesTax = totalOilCost * (salesTaxRate / 100);
-            const totalCost = totalOilCost + filterCost + totalSalesTax + serviceCost;
+            const totalOilFilterCost = oilFilterCost; // Changed to oil filter cost
+            let totalFilterCost = totalOilFilterCost;
+
+            // Calculate additional costs if selected
+            if (includeAirFilter) {
+                totalFilterCost += airFilterCost;
+            }
+
+            if (includeCabinAirFilter) {
+                totalFilterCost += cabinAirFilterCost;
+            }
+
+            const totalSalesTax = (totalOilCost + totalFilterCost) * (salesTaxRate / 100);
+            const totalCost = totalOilCost + totalFilterCost + totalSalesTax + serviceCost + sparkPlugCost;
 
             // Update the result section with the breakdown
             document.getElementById('result').innerHTML = `
@@ -189,9 +290,12 @@
                         <td>$${totalOilCost.toFixed(2)}</td>
                     </tr>
                     <tr>
-                        <td>Filter Cost</td>
-                        <td>$${filterCost.toFixed(2)}</td>
+                        <td>Oil Filter Cost</td>
+                        <td>$${totalOilFilterCost.toFixed(2)}</td>
                     </tr>
+                    ${includeAirFilter ? `<tr><td>Air Filter Cost</td><td>$${airFilterCost.toFixed(2)}</td></tr>` : ''}
+                    ${includeCabinAirFilter ? `<tr><td>Cabin Air Filter Cost</td><td>$${cabinAirFilterCost.toFixed(2)}</td></tr>` : ''}
+                    ${includeSparkPlugChange ? `<tr><td>Spark Plug Cost</td><td>$${sparkPlugCost.toFixed(2)}</td></tr>` : ''}
                     <tr>
                         <td>Sales Tax</td>
                         <td>$${totalSalesTax.toFixed(2)}</td>
@@ -206,7 +310,29 @@
                     </tr>
                 </table>
             `;
+
+            // Display the modal
+            displayModal();
         }
+
+        function displayModal() {
+            document.getElementById('myModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('myModal').style.display = 'none';
+        }
+
+        // Show/hide spark plug input based on checkbox state
+        document.getElementById('includeSparkPlugChange').addEventListener('change', function() {
+            const inputContainer = document.getElementById('sparkPlugInputContainer');
+            if (this.checked) {
+                inputContainer.style.display = 'inline-block';
+            } else {
+                inputContainer.style.display = 'none';
+            }
+        });
+
     </script>
 
     <footer>
