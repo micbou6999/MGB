@@ -6,6 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MGB Car Company - Mobile Oil Changes</title>
     <style>
+    	.notification {
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            position: relative;
+        }
+
+        .countdown-clock {
+            font-size: 2em;
+            text-align: center;
+        }
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -129,6 +141,9 @@
 </head>
 
 <body>
+	<div class="notification">
+        <p>Hurry! Get a 20% discount - Offer ends October 14 at 5:30 PM</p>
+    </div>
     <header>
         <img src="logo.png" alt="MGB Car Company Logo">
         <p>Serving the Bay Area with Top-Quality Automotive Care</p>
@@ -151,6 +166,8 @@
             </ul>
         </nav>
     </header>
+
+
     <section>
         <h2>Contact Us</h2>
         <p>If you have any questions or inquiries, please feel free to contact us:</p>
@@ -169,9 +186,31 @@
 
         <p>Rest assured that if we encounter any unexpected repairs, we will promptly inform you and discuss the best course of action to ensure your vehicle's safety and performance. Our goal is to provide you with the most comprehensive and reliable service possible.</p>
     </section>
+     <script>
+        // Set the date we're counting down to
+        var countDownDate = new Date("Oct 14, 2023 17:30:00").getTime();
+
+        // Update the countdown every 1 second
+        var x = setInterval(function() {
+            var now = new Date().getTime();
+            var distance = countDownDate - now;
+            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.querySelector('.countdown-clock').innerHTML = days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
+
+            if (distance < 0) {
+                clearInterval(x);
+                document.querySelector('.countdown-clock').innerHTML = "EXPIRED";
+            }
+        }, 1000);
+    </script>
     <footer>
        <p>&copy; 2023 MGB Car Company | Follow us on <a class="instagram-link" href="https://www.instagram.com/boutros_automotive/">Instagram</a> for the latest updates!</p>
     </footer>
+	       
 </body>
 
 </html>
