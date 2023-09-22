@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oil Change Cost Estimator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 20px 0;
+            margin-bottom: 20px;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        section {
+            margin: 20px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .estimator-form {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        .result {
+            font-weight: bold;
+            font-size: 1.2em;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        table, th, td {
+            border: 1px solid #ccc;
+            border-collapse: collapse;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th, td {
+            font-weight: normal;
+        }
+
+        th {
+            background-color: #333;
+            color: #fff;
+        }
+
+        th, td {
+            width: 50%;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px 0;
+            background-color: #333;
+            color: #fff;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+
+        footer p {
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Oil Change Cost Estimator</h1>
+    </header>
+
+    <section>
+        <form class="estimator-form">
+            <div class="form-group">
+                <label for="oilCapacity">Oil Capacity (quarts)</label>
+                <input type="number" id="oilCapacity" min="0" step="0.1" value="5">
+            </div>
+            <div class="form-group">
+                <label for="oilType">Oil Type</label>
+                <select id="oilType">
+                    <option value="synthetic">Synthetic</option>
+                    <option value="conventional">Conventional</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="mileageOption">Mileage Option</label>
+                <select id="mileageOption">
+                    <option value="greaterThan75000">Greater than 75000</option>
+                    <option value="lessThanOrEqualTo75000">Less than or equal to 75000</option>
+                </select>
+            </div>
+            <button type="button" onclick="calculateCost()">Estimate Cost</button>
+        </form>
+
+        <div class="result" id="result"></div>
+
+        <p>For a basic estimate, you can perform a Google search using your car's year, make, and model along with "oil capacity and type".</p>
+    </section>
+
+    <script>
+        function calculateCost() {
+            const oilCapacity = parseFloat(document.getElementById('oilCapacity').value);
+            const oilType = document.getElementById('oilType').value;
+            const mileageOption = document.getElementById('mileageOption').value;
+            
+            // Define costs
+            let oilCost;
+            let filterCost = 11.99;
+            const salesTaxRate = 10.75; // 10.75% sales tax
+            const serviceCost = 50;
+
+            if (oilType === 'synthetic' && mileageOption === 'greaterThan75000') {
+                oilCost = 12.59;
+            } else if (oilType === 'synthetic') {
+                oilCost = 11.59;
+            } else if (oilType === 'conventional' && mileageOption === 'greaterThan75000') {
+                oilCost = 8.59;
+            } else {
+                oilCost = 7.59;
+            }
+
+            // Calculate total costs
+            const totalOilCost = oilCapacity * oilCost;
+            const totalSalesTax = totalOilCost * (salesTaxRate / 100);
+            const totalCost = totalOilCost + filterCost + totalSalesTax + serviceCost;
+
+            // Update the result section with the breakdown
+            document.getElementById('result').innerHTML = `
+                <table>
+                    <tr>
+                        <th>Cost Category</th>
+                        <th>Cost ($)</th>
+                    </tr>
+                    <tr>
+                        <td>Oil Cost</td>
+                        <td>$${totalOilCost.toFixed(2)}</td>
+                    </tr>
+                    <tr>
+                        <td>Filter Cost</td>
+                        <td>$${filterCost.toFixed(2)}</td>
+                    </tr>
+                    <tr>
+                        <td>Sales Tax</td>
+                        <td>$${totalSalesTax.toFixed(2)}</td>
+                    </tr>
+                    <tr>
+                        <td>Service Cost</td>
+                        <td>$${serviceCost.toFixed(2)}</td>
+                    </tr>
+                    <tr>
+                        <td>Total Cost</td>
+                        <td>$${totalCost.toFixed(2)}</td>
+                    </tr>
+                </table>
+            `;
+        }
+    </script>
+
+    <footer>
+        <p>&copy; 2023 Mobile Oil Changes</p>
+    </footer>
+</body>
+
+</html>
