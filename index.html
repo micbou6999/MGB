@@ -6,7 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MGB Car Company - Mobile Oil Changes</title>
     <style>
-    	.notification {
+        /* Your existing CSS styles here */
+
+        .notification {
             background-color: #4CAF50;
             color: white;
             text-align: center;
@@ -18,16 +20,19 @@
             font-size: 2em;
             text-align: center;
         }
+
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
             background-color: #f5f5f5;
         }
+
         .instagram-link {
-    color: #e4405f; /* Change this to the desired color */
-}
-	        footer {
+            color: #e4405f; /* Change this to the desired color */
+        }
+
+        footer {
             text-align: center;
             padding: 10px 0;
             background-color: #333;
@@ -40,6 +45,7 @@
         footer p {
             margin: 0;
         }
+
         header {
             background-color: #333;
             color: #fff;
@@ -108,40 +114,41 @@
             bottom: 0;
         }
 
-.dropdown {
-    position: relative;
-    display: inline-block;
-}
+        /* Dropdown Styles */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
 
-.dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #f9f9f9;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
-}
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            text-align: left;
+        }
 
-.dropdown-content a {
-    color: black;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-}
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
 
-.dropdown-content a:hover {
-    background-color: #f1f1f1;
-}
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
 
-.dropdown:hover .dropdown-content {
-    display: block;
-}
-
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
     </style>
 </head>
 
 <body>
-	<div class="notification">
+    <div class="notification">
         <p>Hurry! Get a 20% discount - Offer ends October 14 at 5:30 PM</p>
     </div>
     <header>
@@ -149,11 +156,16 @@
         <p>Serving the Bay Area with Top-Quality Automotive Care</p>
         <nav>
             <ul>
-                <li><a href="mobile_oil_changes.html">Mobile Oil Changes</a></li>
-                <li><a href="rountine_maintenance.html">Routine Maintenance</a></li>
-                <li><a href="oilchange_estimator.html">Oil Change Estimator</a></li>
+                <li class="dropdown">
+                    <a href="javascript:void(0)" class="dropbtn">Services</a>
+                    <div class="dropdown-content">
+                        <a href="mobile_oil_changes.html">Mobile Oil Changes</a>
+                        <a href="rountine_maintenance.html">Routine Maintenance</a>
+                        <a href="oilchange_estimator.html">Oil Change Estimator</a>
+                    </div>
+                </li>
                 <li><a href="parts.html">Products Used</a></li>
-            	<li class="dropdown">
+                <li class="dropdown">
                     <a href="javascript:void(0)" class="dropbtn">Repairs</a>
                     <div class="dropdown-content">
                         <a href="check_engine_light.html">Check Engine Light</a>
@@ -161,11 +173,16 @@
                         <a href="repair3.html">Cranking But No Start</a>
                     </div>
                 </li>
-                <li><a href="about_us.html">About Us</a></li>
+                <li class="dropdown">
+                    <a href="javascript:void(0)" class="dropbtn">Company Info</a>
+                    <div class="dropdown-content">
+                        <a href="about_us.html">About Us</a>
+                        <a href="contactus.html">Contact Us</a>
+                    </div>
+                </li>
             </ul>
         </nav>
     </header>
-
 
     <section>
         <h2>Contact Us</h2>
@@ -185,7 +202,12 @@
 
         <p>Rest assured that if we encounter any unexpected repairs, we will promptly inform you and discuss the best course of action to ensure your vehicle's safety and performance. Our goal is to provide you with the most comprehensive and reliable service possible.</p>
     </section>
-     <script>
+    <section>
+        <h2>Hours of Operation</h2>
+        <p>Monday - Saturday: 8:30 AM - 5:00 PM</p>
+        <p>Sunday: Closed</p>
+    </section>
+    <script>
         // Set the date we're counting down to
         var countDownDate = new Date("Oct 14, 2023 17:30:00").getTime();
 
@@ -207,9 +229,8 @@
         }, 1000);
     </script>
     <footer>
-       <p>&copy; 2023 MGB Car Company | Follow us on <a class="instagram-link" href="https://www.instagram.com/boutros_automotive/">Instagram</a> for the latest updates!</p>
+        <p>&copy; 2023 MGB Car Company | Follow us on <a class="instagram-link" href="https://www.instagram.com/boutros_automotive/">Instagram</a> for the latest updates!</p>
     </footer>
-	       
 </body>
 
 </html>
